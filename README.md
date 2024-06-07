@@ -1,0 +1,101 @@
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.junit.Assert;
+import java.util.List;
+
+
+public class Tendable
+{
+  
+public static void main(String[] args)
+{
+  
+  System.setProperty("webdriver.chrome.driver","path of chromedriver.exe");
+  WebDriver driver = new chromedriver();
+  WebDriverWait wait = new WebDriverWait(driver,10);
+  driver.get("https://www.tendable.com/");
+  
+  
+  //Confirm accessibility of the top-level menus
+   WebElement home = driver.findElement(By.linkText("//a[@href='https://www.tendable.com/']"));
+   WebElement ourStory = driver.findElement(By.linkText("//a[@href='https://www.tendable.com/our-story']")); 
+   WebElement ourSolution = driver.findElement(By.linkText("//*[text()[contains(.,'Solution')]]"));
+   WebElement whyTendable = driver.findElement(By.linkText("//a[@href='https://www.tendable.com/why-tendable']"));
+   
+   String[] str = {"home", "ourStory", "ourSolution", "whyTendable"};
+    
+    List menu = new ArrayList<>(Arrays.asList(str));
+    
+    Iterator itr = menu.Iterator();
+    
+    System.out.System.out.println(itr);
+    
+    while(itr.hasNext())
+    {
+      System.out.println(itr.next());
+      Assert.asserTrue(itr.isDisplayed());
+      itr.click();
+    }
+    
+    
+    //Verify that the "Request a Demo" button is present and active
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/header/div/div[1]/a[3]")));
+    WebElement demob = driver.findElement(By.xpath("/html/body/header/div/div[1]/a[3]"));
+     Assert.assertTrue(demob.isDisplayed());
+     Assert.assertTrue(demob.isEnabled());
+     
+     
+        // Navigate to the "Contact Us" section
+        WebElement contactUsLink = driver.findElement(By.xpath("//ul/li[6]/a[@href='https://www.tendable.com/contact-us']"));
+        contactUsLink.click();
+        
+        
+        //Select Marketing
+        WebElement marketing = driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div/div[1]/div/div[2]/div[2]/button"));
+        marketing.click();
+        
+        
+         // Fill in the form 
+         driver.findElement(By.xpath("//form[@id='contactMarketingPipedrive-163701']//input[@id='form-input-fullName']")).sendKeys("Jemmy Tako");
+         driver.findElement(By.xpath("//form[@id='contactMarketingPipedrive-163701']//input[@id='form-input-organisationName']")).sendKeys("Abcxyz");
+         driver.findElement(By.xpath("//form[@id='contactMarketingPipedrive-163701']//input[@id='form-input-cellPhone']")).sendKeys("1234567890");
+         driver.findElement(By.xpath("//form[@id='contactMarketingPipedrive-163701']//input[@id='form-input-email']")).sendKeys("abc@xyz.com");
+         
+        WebElement jobRole = driver.findElemnt(By.xpath("//form[@id='contactMarketingPipedrive-163701']//select[@id='form-input-jobRole']"));
+         Select s = new Select(jobRole);
+         s.SelectByVisibleText("Management");
+         
+         WebElement accept = driver.findElement(By.xpath("//form[@id='contactMarketingPipedrive-163701']//input[@id='form-input-consentAgreed-0']"));
+         
+         
+        // Submit the form
+        WebElement submitButton = driver.findElement(By.xpath("//button[@data-loading-text='Loading...'][normalize-space()='Submit']"));
+        submitButton.click();
+        
+        
+        //Confirm the error message's appearance
+         WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='ff-form-errors']")));
+         Assert.assertTrue(errorMessage.isDisplayed());
+         
+         if (errorMessage.isDisplayed()) {
+            System.out.println("Test PASS: Error message is displayed as expected.");
+        } else 
+        {
+            System.out.println("Test FAIL: Error message is not displayed.");
+        }
+        
+        if (driver != null) 
+        {
+            driver.quit();
+        }
+        
+ 
+     }
+}
+    
